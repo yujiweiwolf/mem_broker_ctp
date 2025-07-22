@@ -11,12 +11,13 @@ broker:
   idle_sleep_ns: 1000000
   cpu_affinity: 0
   node_name: 华泰金桥2机房浩睿股票交易Broker
+  # 一台服务器上， 不管多少个broker, 共用这两块内存
   mem_dir: ../data
   mem_req_file: broker_req
   mem_rep_file: broker_rep
 
 #// 国泰君安测试地址 libctp-6.6.8, 6.3.15 两个版本
-ctp:
+ctp_guotai:
   ctp_trade_front    : tcp://180.169.50.131:42205
   ctp_broker_id      : 2071
   ctp_investor_id    : 0080600133
@@ -60,11 +61,46 @@ ctp_huatai:
   ctp_auth_code      : O11TUJLKRVU27ZA8
   disable_subscribe  : false
 
-risk:
-# 股指期货自动开平仓时禁止平今
-  risk_forbid_closing_today     : true
+# 广发
+ctp_gaung:
+  ctp_trade_front    : tcp://183.62.252.251:42405
+  ctp_broker_id      : 2358
+  ctp_investor_id    : 590197278
+  ctp_password       : .abcd@1234
+  ctp_app_id         : client_pftzfuture_1.0.1
+  ctp_product_info   : pf1hfuture
+  ctp_auth_code      : T9AK4GNPDBVYUB9C
+  disable_subscribe  :
+
+
+# 建投 libctp-6.3.16  没有成交时， 就自己报买卖，自已跟自己成交
+ctp_jiantou:
+  ctp_trade_front: tcp://106.37.101.162:31205
+  ctp_broker_id: 1010
+  ctp_investor_id: 10000007
+  ctp_password: .abc@123456
+  ctp_app_id: client_pftzfuture_1.0.1
+  ctp_product_info: pf1hfuture
+  ctp_auth_code: YHQHYHQHYHQHYHQH
+  disable_subscribe: false
+
+# 光大期货, libctp-6.6.9_test
+ctp:
+  ctp_trade_front    : tcp://120.136.170.202:41205
+  ctp_broker_id      : 6000
+  ctp_investor_id    : 00001920
+  ctp_password       : .aa888888
+  ctp_app_id         : client_pftzfuture_1.0.1
+  ctp_product_info   : pf1hfuture
+  ctp_auth_code      : XRBHC5CC414MK285
+  disable_subscribe  : false
+
+cffex:
+  # 股指期货自动开平仓时禁止平今
+  forbid_closing_today: true
   # 股指期货每日最大开仓数限制（0-禁止开仓，-1：无限制）
-  risk_max_today_opening_volume : 20
+  max_today_opening_volume: 20
+
 log:
   level: info
   async: false

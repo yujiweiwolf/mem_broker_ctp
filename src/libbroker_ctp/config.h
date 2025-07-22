@@ -4,10 +4,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
 #include <x/x.h>
 #include "mem_broker/mem_base_broker.h"
-#include "mem_broker/mem_server.h"
-
+#include "risker/risk_options.h"
 using namespace std;
 
 namespace co {
@@ -38,16 +38,11 @@ namespace co {
             return ctp_auth_code_;
         }
 
-        inline bool risk_forbid_closing_today() {
-            return risk_forbid_closing_today_;
-        }
-
-        inline int risk_max_today_opening_volume() {
-            return risk_max_today_opening_volume_;
-        }
-
         inline MemBrokerOptionsPtr options() {
             return options_;
+        }
+        const std::vector<std::shared_ptr<RiskOptions>>& risk_opt() const {
+            return risk_opts_;
         }
 
         inline bool disable_subscribe() {
@@ -66,6 +61,7 @@ namespace co {
         static Config* instance_;
 
         MemBrokerOptionsPtr options_;
+        std::vector<std::shared_ptr<RiskOptions>> risk_opts_;
 
         string ctp_trade_front_;
 
@@ -77,9 +73,6 @@ namespace co {
         string ctp_auth_code_;
 
         bool disable_subscribe_ = false;
-
-        bool risk_forbid_closing_today_ = false;
-        int risk_max_today_opening_volume_ = 0;
     };
 
 }

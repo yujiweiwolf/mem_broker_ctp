@@ -1,9 +1,9 @@
 // Copyright 2021 Fancapital Inc.  All rights reserved.
 #pragma once
-#include <mutex>
 #include "ctp_support.h"
 #include "config.h"
-#include "inner_future_master.h"
+#include "mem_broker/mem_base_broker.h"
+#include "mem_broker/mem_server.h"
 
 using namespace std;
 using namespace x;
@@ -33,20 +33,10 @@ class CTPTradeSpi : public CThostFtdcTraderSpi {
     void ReqQryInvestorPosition();
 
     void OnQueryTradeAsset(MemGetTradeAssetMessage* req);
-
     void OnQueryTradePosition(MemGetTradePositionMessage* req);
-
     void OnQueryTradeKnock(MemGetTradeKnockMessage* req);
-
     void OnTradeOrder(MemTradeOrderMessage* req);
-
     void OnTradeWithdraw(MemTradeWithdrawMessage* req);
-
-//    void OnQueryTradeAsset(const std::string& raw_req);
-//    void OnQueryTradePosition(const std::string& raw_req);
-//    void OnQueryTradeKnock(const std::string& raw_req);
-//    void OnTradeOrder(const std::string& raw_req);
-//    void OnTradeWithdraw(const std::string& raw_req);
 
     ///当客户端与交易后台建立起通信连接时（还未登录前），该方法被调用。
     virtual void OnFrontConnected();
@@ -111,11 +101,8 @@ class CTPTradeSpi : public CThostFtdcTraderSpi {
  protected:
     void Start();
     int GetRequestID();
-    void PrepareQuery();
-    string GetContractName(const string code);
 
  private:
-    int state_ = 0;
     string broker_id_;
     string investor_id_;
     int64_t date_ = 0;
@@ -129,24 +116,20 @@ class CTPTradeSpi : public CThostFtdcTraderSpi {
     CThostFtdcTraderApi* api_ = nullptr;
     map<string, string> order_nos_; // CTP的OrderSysId到内部order_no的映射关系，用于在成交回报接收时查找对应的委托合同号
 
-    InnerFutureMaster future_position_master_;
-    int64_t pre_query_timestamp_ = 0; // 上次查询的时间戳，用于进行流控控制，CTP限制每秒只能查询一次
 
     int start_index_ = 0;
     mutex mutex_;
     string rsp_query_msg_;
     string query_cursor_;
-    flatbuffers::FlatBufferBuilder req_fbb_;
 
     CThostFtdcTradingAccountField accout_field_;
     std::unordered_map<int, std::string> query_msg_;
     std::unordered_map<int, std::string> req_msg_;
     std::atomic_bool query_instruments_finish_;
-    std::vector <CThostFtdcTradeField> all_ftdc_trades_;
 
     std::unordered_map<std::string, std::string> withdraw_msg_;  // OnRtnOrder中的RequestID是0，导致必须要自己维护, key是order_no
-    std::vector<MemTradeKnock> all_knock_;
-    std::unordered_map<std::string, MemTradePosition> all_pos_;
+    std::vector<std::unique_ptr<MemTradeKnock>> all_knock_;
+    std::unordered_map<std::string, std::unique_ptr<MemTradePosition>> all_pos_;
     std::unordered_map<std::string, std::pair<std::string, int>> all_instruments_;  // 保存合约名称与乘数
 };
 }  // namespace co

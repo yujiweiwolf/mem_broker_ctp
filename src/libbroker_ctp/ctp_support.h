@@ -7,14 +7,13 @@
 #include "ThostFtdcUserApiStruct.h"
 #include "ThostFtdcUserApiDataType.h"
 
-
 #ifdef _WIN32
 #pragma comment(lib, "thostmduserapi_se.lib")
 #pragma comment(lib, "thosttraderapi_se.lib")
 #endif
 
 namespace co {
-    // CTP锟皆诧拷询锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷, 每锟斤拷锟斤拷锟斤拷锟斤拷一锟轿诧拷询锟斤拷锟斤拷
+    // CTP对查询请求设置了流量控制, 每秒最多进行一次查询操作
     constexpr int64_t CTP_FLOW_CONTROL_MS = 1000;
 
     string CtpApiError(int rc);

@@ -22,21 +22,6 @@ namespace co {
                 throw std::runtime_error(e.what());
             }
         };
-        auto getStrings = [&](std::vector<std::string>* ret, const YAML::Node& node, const std::string& name, bool drop_empty = false) {
-            try {
-                if (node[name] && !node[name].IsNull()) {
-                    for (auto item : node[name]) {
-                        std::string s = x::Trim(item.as<std::string>());
-                        if (!drop_empty || !s.empty()) {
-                            ret->emplace_back(s);
-                        }
-                    }
-                }
-            } catch (std::exception& e) {
-                LOG_ERROR << "load configuration failed: name = " << name << ", error = " << e.what();
-                throw std::runtime_error(e.what());
-            }
-        };
         auto getInt = [&](const YAML::Node& node, const std::string& name, const int64_t& default_value = 0) {
             try {
                 return node[name] && !node[name].IsNull() ? node[name].as<int64_t>() : default_value;
@@ -57,6 +42,7 @@ namespace co {
         auto filename = x::FindFile("broker.yaml");
         YAML::Node root = YAML::LoadFile(filename);
         options_ = MemBrokerOptions::Load(filename);
+        risk_opts_ = RiskOptions::Load(filename);
 
         auto broker = root["ctp"];
         ctp_trade_front_ = getStr(broker, "ctp_trade_front");
@@ -69,9 +55,6 @@ namespace co {
         ctp_auth_code_ = getStr(broker, "ctp_auth_code");
         disable_subscribe_ = getBool(broker, "disable_subscribe");
 
-        auto risk = root["risk"];
-        risk_forbid_closing_today_ = getBool(risk, "risk_forbid_closing_today");
-        risk_max_today_opening_volume_ = getInt(risk, "risk_max_today_opening_volume");
         try {
             // string log_level = ini.get<string>("log.level");
             // x::SetLogLevel(log_level);
@@ -91,10 +74,7 @@ namespace co {
             << "  ctp_app_id: " << ctp_app_id_ << endl
             << "  ctp_product_info: " << ctp_product_info_ << endl
             << "  ctp_auth_code: " << ctp_auth_code_ << endl
-            << "  disable_subscribe: " << (disable_subscribe_ ? "true" : "false") << endl
-            << "risk:" << endl
-            << "  risk_forbid_closing_today: " << (risk_forbid_closing_today_ ? "true" : "false") << endl
-            << "  risk_max_today_opening_volume: " << risk_max_today_opening_volume_ << endl;
+            << "  disable_subscribe: " << (disable_subscribe_ ? "true" : "false") << endl;
         ss << "+-------------------- configuration end   --------------------+";
         LOG_INFO << endl << ss.str();
     }

@@ -436,7 +436,7 @@ namespace co {
     }
 
     TThostFtdcTimeConditionType order_time_condition2ctp(string v) {
-        TThostFtdcTimeConditionType ret;
+        TThostFtdcTimeConditionType ret = -1;
         if (v.empty() || v == "General_Order") {  // ������Ч
             ret = THOST_FTDC_TC_GFD;
         } else if (v == "Automatically_Withdraw") {
@@ -496,7 +496,7 @@ namespace co {
     void DeleteCzceCode(string& code) {
         int _num = 0;
         int index = -1;
-        for (int _i = 0; _i < code.length(); _i++) {
+        for (size_t _i = 0; _i < code.length(); _i++) {
             char temp = code.at(_i);
             if (temp >= '0' && temp <= '9') {
                 _num++;
@@ -513,7 +513,7 @@ namespace co {
     void InsertCzceCode(string& code) {
         int _num = 0;
         int index = -1;
-        for (int _i = 0; _i < code.length(); _i++) {
+        for (size_t _i = 0; _i < code.length(); _i++) {
             char temp = code.at(_i);
             if (temp >= '0' && temp <= '9') {
                 _num++;

@@ -3,13 +3,14 @@
 #include <sstream>
 #include <string>
 #include <boost/program_options.hpp>
-#include "../libbroker_ctp/libbroker_ctp.h"
+
+#include "../libbroker_ctp/ctp_broker.h"
 
 using namespace std;
 using namespace co;
 namespace po = boost::program_options;
 
-const string kVersion = "v2.0.3";
+const string kVersion = "v2.0.6";
 
 int main(int argc, char* argv[]) {
     po::options_description desc("[Broker Server] Usage");
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
     }
     try {
         LOG_INFO << "kVersion: " << kVersion;
-        MemBrokerOptionsPtr options = Config::Instance()->options();
+        BrokerOptionsPtr options = Config::Instance()->options();
         shared_ptr<CTPBroker> broker = make_shared<CTPBroker>();
         co::BrokerServer server;
         server.Init(options, broker);
