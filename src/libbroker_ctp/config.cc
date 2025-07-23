@@ -22,14 +22,6 @@ namespace co {
                 throw std::runtime_error(e.what());
             }
         };
-        auto getInt = [&](const YAML::Node& node, const std::string& name, const int64_t& default_value = 0) {
-            try {
-                return node[name] && !node[name].IsNull() ? node[name].as<int64_t>() : default_value;
-            } catch (std::exception& e) {
-                LOG_ERROR << "load configuration failed: name = " << name << ", error = " << e.what();
-                throw std::runtime_error(e.what());
-            }
-        };
         auto getBool = [&](const YAML::Node& node, const std::string& name) {
             try {
                 return node[name] && !node[name].IsNull() ? node[name].as<bool>() : false;

@@ -74,7 +74,7 @@ ctp_gaung:
 
 
 # 建投 libctp-6.3.16  没有成交时， 就自己报买卖，自已跟自己成交
-ctp_jiantou:
+ctp:
   ctp_trade_front: tcp://106.37.101.162:31205
   ctp_broker_id: 1010
   ctp_investor_id: 10000007
@@ -85,7 +85,7 @@ ctp_jiantou:
   disable_subscribe: false
 
 # 光大期货, libctp-6.6.9_test
-ctp:
+ctp_guang:
   ctp_trade_front    : tcp://120.136.170.202:41205
   ctp_broker_id      : 6000
   ctp_investor_id    : 00001920
