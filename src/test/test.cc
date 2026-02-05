@@ -10,7 +10,7 @@ string mem_dir;
 string mem_req_file;
 string mem_rep_file;
 
-void order_shfe(shared_ptr<MemBroker> broker) {
+void order_shfe(shared_ptr<MemBaseBroker> broker) {
     int total_order_num = 1;
     string id = x::UUID();
     int length = sizeof(MemTradeOrderMessage) + sizeof(MemTradeOrder) * total_order_num;
@@ -34,7 +34,7 @@ void order_shfe(shared_ptr<MemBroker> broker) {
     broker->SendTradeOrder(msg);
 }
 
-void withdraw(shared_ptr<MemBroker> broker) {
+void withdraw(shared_ptr<MemBaseBroker> broker) {
     string id = x::UUID();
     MemTradeWithdrawMessage msg;
     memset(&msg, 0, sizeof(msg));
@@ -51,7 +51,7 @@ void withdraw(shared_ptr<MemBroker> broker) {
 // BUY CLOSE IC2507.CFFEX 1 6809.9
 // BUY AUTO IC2507.CFFEX 1 6809.9
 // BUY SELL IC2507.CFFEX 1 6809.9
-void order(shared_ptr<MemBroker> broker) {
+void order(shared_ptr<MemBaseBroker> broker) {
     int total_order_num = 1;
     string id = x::UUID();
     int length = sizeof(MemTradeOrderMessage) + sizeof(MemTradeOrder) * total_order_num;
@@ -123,7 +123,7 @@ void order(shared_ptr<MemBroker> broker) {
     broker->SendTradeOrder(msg);
 }
 
-void query_asset(shared_ptr<MemBroker> broker) {
+void query_asset(shared_ptr<MemBaseBroker> broker) {
     string id = x::UUID();
     MemGetTradeAssetMessage msg {};
     strncpy(msg.id, id.c_str(), id.length());
@@ -132,7 +132,7 @@ void query_asset(shared_ptr<MemBroker> broker) {
     broker->SendQueryTradeAsset(&msg);
 }
 
-void query_position(shared_ptr<MemBroker> broker) {
+void query_position(shared_ptr<MemBaseBroker> broker) {
     string id = x::UUID();
     MemGetTradePositionMessage msg {};
     strncpy(msg.id, id.c_str(), id.length());
@@ -141,7 +141,7 @@ void query_position(shared_ptr<MemBroker> broker) {
     broker->SendQueryTradePosition(&msg);
 }
 
-void query_knock(shared_ptr<MemBroker> broker) {
+void query_knock(shared_ptr<MemBaseBroker> broker) {
     string id = x::UUID();
     MemGetTradeKnockMessage msg {};
     strncpy(msg.id, id.c_str(), id.length());

@@ -13,7 +13,7 @@
 
 namespace co {
 class CTPTradeSpi;
-class CTPBroker: public MemBroker {
+class CTPBroker: public MemBaseBroker {
  public:
     friend class CTPTradeSpi;
     explicit CTPBroker() = default;

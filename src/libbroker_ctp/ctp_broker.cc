@@ -21,7 +21,7 @@ void CTPBroker::OnInit() {
     acc.type = kTradeTypeFuture;
     strcpy(acc.fund_id, Config::Instance()->ctp_investor_id().c_str());
     acc.batch_order_size = 0;
-    AddAccount(acc);
+    SetAccount(acc);
     ctp_spi_ = new CTPTradeSpi(this);
     thread_ = std::make_shared<std::thread>(std::bind(&CTPBroker::RunCtp, this));
     ctp_spi_->Wait();
